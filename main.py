@@ -14,7 +14,7 @@ time.sleep(2)
 
 motion_detected = True
 countdown_start_time = None
-alarm_mode = False
+detection_mode = False
 alarm_counter = 0
 start_frame = None
 
@@ -35,7 +35,7 @@ while True:
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     blurred_frame = cv2.GaussianBlur(gray_frame, (21, 21), 0)
 
-    if alarm_mode:
+    if detection_mode:
         if start_frame is None:
             start_frame = blurred_frame.copy()
             continue
@@ -68,17 +68,17 @@ while True:
                     print("No motion detected. Turning off light.")
                     send_command_to_arduino('0')  
                     countdown_start_time = None
-        time.sleep(1)
 
-    cv2.imshow("Camera", frame)
+    if not detection_mode:
+        cv2.imshow("Camera", frame)
 
     key = cv2.waitKey(30) & 0xFF
     if key == ord('t'):
-        alarm_mode = not alarm_mode
+        detection_mode = not detection_mode
         motion_detected = True
         start_frame = None
         countdown_start_time = None
-        print("Detection mode: ON" if alarm_mode else "Detection mode: OFF")
+        print("Detection mode: ON" if detection_mode else "Detection mode: OFF")
     elif key == ord('q'):
         break
 
