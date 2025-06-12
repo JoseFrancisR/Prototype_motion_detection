@@ -20,10 +20,10 @@ start_frame = None
 
 def send_command_to_arduino(cmd):
     arduino.write(cmd.encode())
-    if cmd:
-        print(f"Commanding the arduino to turn on")
+    if cmd == "1":
+        print(f"Commanding the arduino to turn on: {cmd}")
     else:
-        print(f"Commanding the arduino to turn off")
+        print(f"Commanding the arduino to turn off: {cmd}")
 
 while True:
     ret, frame = cap.read()
@@ -68,6 +68,7 @@ while True:
                     print("No motion detected. Turning off light.")
                     send_command_to_arduino('0')  
                     countdown_start_time = None
+        time.sleep(1)
 
     cv2.imshow("Camera", frame)
 
